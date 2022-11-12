@@ -1,39 +1,43 @@
-*{
-    padding: 0px;
-    margin: 0px;
-    box-sizing: border-box;
-}
+const corouselSlide = document.querySelector('.corousel-slide');
+const corouselImages = document.querySelectorAll('.corousel-slide img');
 
-.corousel-container{
-    width: 700px;
-    margin: auto;
-    border: 5px solid black;
-    overflow: hidden;
-    position: relative;
-}
+//buttons
+const prevBtn = document.querySelector('#prevBtn');
+const nextBtn = document.querySelector('#nextBtn');
 
-.corousel-slide{
-    display: flex;
-    width: 100%;
-    height: 500px;
-}
+//Counter
+let counter = 1;
+const size = corouselImages[0].clientWidth;
 
-#prevBtn{
-   position: absolute;
-   top: 50%;
-    z-index: 10;
-    left: 5%;
-    font-size: 30px;
-    color: white;
-    cursor: pointer;
-}
+corouselSlide.style.transform = 'translateX(' + (-size * counter) + 'px)';
 
-#nextBtn{
-    position: absolute;
-    top: 50%;
-     z-index: 10;
-     right: 5%;
-     font-size: 30px;
-     color: white;
-     cursor: pointer;
- }
+//Button listeners
+nextBtn.addEventListener('click', () => {
+    if (counter >= corouselImages.length - 1) return;
+    corouselSlide.style.transition = "transform 0.4s ease-in-out";
+    counter++;
+    corouselSlide.style.transform = 'translateX(' + (-size * counter) + 'px)';
+
+});
+
+prevBtn.addEventListener('click', () => {
+    if (counter <= 0) return;
+    corouselSlide.style.transition = "transform 0.4s ease-in-out";
+    counter--;
+    corouselSlide.style.transform = 'translateX(' + (-size * counter) + 'px)';
+
+});
+
+corouselSlide.addEventListener('transitionend', () => {
+    if (corouselImages[counter].id === 'lastClone') {
+        corouselSlide.style.transition = "none";
+        counter = corouselImages.length - 2;
+        corouselSlide.style.transform = 'translateX(' + (-size * counter) + 'px)';
+    }
+
+    if (corouselImages[counter].id === 'firstClone') {
+        corouselSlide.style.transition = "none";
+        counter = corouselImages.length - counter;
+        corouselSlide.style.transform = 'translateX(' + (-size * counter) + 'px)';
+    }
+})
